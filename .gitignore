@@ -3,7 +3,7 @@ node_modules/
 
 # Playwright specific files and directories
 test-results/
-playwright-report/
+playwright-test-report/
 playwright/.cache/
 playwright/.auth/
 
