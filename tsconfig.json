@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "CommonJS",
     "target": "ESNext",
-    "types": [],
+    "types": ["node"],
 
     // Other Outputs
     "sourceMap": true,
@@ -31,6 +31,6 @@
   },
   "include": [
     "tests/../*.ts",
-    "utils/**/*.ts"
+    "tests/utils/**/*.ts"
   ]
 }

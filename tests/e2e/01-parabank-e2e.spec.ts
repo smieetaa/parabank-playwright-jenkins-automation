@@ -7,8 +7,9 @@ import { AccountsOverviewPage } from '../pages/AccountsOverviewPage';
 import { OpenNewAccountPage } from '../pages/OpenNewAccountPage';
 import { TransferFundsPage } from '../pages/TransferFundsPage';
 import { BillPayPage } from '../pages/BillPayPage';
+import { writeSharedData } from '../utils/dataUtils';
 import { userDetails } from '../fixtures/userDetails';
-
+import { transactionDetails } from '../fixtures/transactionDetails';
 
 test.describe('Parabank end-to-end flow with Page Objects', () => {
 
@@ -36,7 +37,7 @@ test.describe('Parabank end-to-end flow with Page Objects', () => {
         // 3. Login to the application 
         const loginPage = new LoginPage(page);
         await loginPage.goToLoginPage();
-        
+
         // login with valid credentials
         await loginPage.login(userDetails.username, userDetails.password);
         await expect(loginPage.welcomeText).toBeVisible();
@@ -64,23 +65,21 @@ test.describe('Parabank end-to-end flow with Page Objects', () => {
         // 7. Transfer funds
         await homePage.goToTransferFunds();
         const transferFundsPage = new TransferFundsPage(page);
-        await transferFundsPage.transferFunds(savingsAccountNumber, '10');
+        await transferFundsPage.transferFunds(savingsAccountNumber, transactionDetails.savingsAmount);
         await expect(page.getByText('Transfer Complete!')).toBeVisible();
 
         // 8. Pay the bill
         await homePage.goToBillPay();
         const billPayPage = new BillPayPage(page);
-        const billAmount = '5';
-        await billPayPage.payBillWithAccount(savingsAccountNumber, billAmount);
+        await billPayPage.payBillWithAccount(savingsAccountNumber, transactionDetails.billAmount);
         await expect(page.getByText('Bill Payment Complete')).toBeVisible();
 
-        // const path = require('path');
-        // const sharedData = {
-        //     accountId: savingsAccountNumber,
-        //     paymentAmount: billAmount
-        // };
-        // const dataFilePath = path.join(__dirname, '../data/sharedData.json');
-        // fs.writeFileSync(dataFilePath, JSON.stringify(sharedData, null, 2));
+        // Call the utility function to save the data
+        const sharedData = {
+            accountId: savingsAccountNumber,
+            billAmount: transactionDetails.billAmount
+        };
+        writeSharedData(sharedData);
 
         // logout user
         await expect(homePage.logoutLink).toBeVisible();

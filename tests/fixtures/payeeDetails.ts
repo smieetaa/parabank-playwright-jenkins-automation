@@ -1,5 +1,5 @@
 export const payeeDetails = {
-    name: 'Some Company',
+    name: 'Company',
     street: 'Williams',
     city: 'Glen',
     state: 'VIC',
