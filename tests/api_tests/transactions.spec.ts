@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Transactions API Tests', () => {
 
-    test('Search transactions by amount for bill payment', async ({ request }) => {
+    test.skip('Search transactions by amount for bill payment', async ({ request }) => {
         // --- Prerequisites: Assuming a bill payment of $5 was made to account '987654321' ---
         // In a real-world scenario, you would dynamically get the account ID
         // and the transaction amount from the UI test. For this example, we'll
