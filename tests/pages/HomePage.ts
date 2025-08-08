@@ -7,6 +7,7 @@ export class HomePage {
     readonly accountsOverviewLink: Locator;
     readonly transferFundsLink: Locator;
     readonly billPayLink: Locator;
+    readonly logoutLink: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -15,6 +16,7 @@ export class HomePage {
         this.accountsOverviewLink = page.getByRole('link', { name: 'Accounts Overview' });
         this.transferFundsLink = page.getByRole('link', { name: 'Transfer Funds' });
         this.billPayLink = page.getByRole('link', { name: 'Bill Pay' });
+        this.logoutLink = page.getByRole('link', { name: 'Log Out' });
     }
 
     async goToOpenNewAccount(): Promise<void> {
@@ -31,5 +33,9 @@ export class HomePage {
 
     async goToBillPay(): Promise<void> {
         await this.billPayLink.click();
+    }
+
+    async logoutUser(): Promise<void> {
+        await this.logoutLink.click();
     }
 }

@@ -25,10 +25,10 @@ test.describe('Parabank end-to-end flow with Page Objects', () => {
 
         const homePage = new HomePage(page);
         await expect(homePage.welcomeMessage(userDetails.username)).toBeVisible();
-        console.log(`1. Launched ParaBank application \n2. User created: ${userDetails.username}`);
 
         // logout registered user to perform login in subsequent test
-        console.log('-> logged out registered user to perform login in subsequent test');
+        await expect(homePage.logoutLink).toBeVisible();
+        await homePage.logoutUser();
     });
 
 
@@ -36,14 +36,10 @@ test.describe('Parabank end-to-end flow with Page Objects', () => {
         // 3. Login to the application 
         const loginPage = new LoginPage(page);
         await loginPage.goToLoginPage();
-        ;
-        // await loginPage.login(userDetails.username, 'invalidPassword');
-        // await expect(loginPage.loginErrorMessage).toBeVisible();
-        // console.log('3. Invalid credentials - login failed');
-
+        
+        // login with valid credentials
         await loginPage.login(userDetails.username, userDetails.password);
         await expect(loginPage.welcomeText).toBeVisible();
-        console.log(`-> Valid credentials - user: ${userDetails.username} logged in successfully`);
 
         // 4. Verify Global navigation menu
         const homePage = new HomePage(page);
@@ -51,14 +47,12 @@ test.describe('Parabank end-to-end flow with Page Objects', () => {
         await expect(homePage.accountsOverviewLink).toBeVisible();
         await expect(homePage.transferFundsLink).toBeVisible();
         await expect(homePage.billPayLink).toBeVisible();
-        console.log('4. Verified Global navigation menu');
 
         // 5. Create a Savings account
         await homePage.goToOpenNewAccount();
         const openNewAccountPage = new OpenNewAccountPage(page);
         await expect(openNewAccountPage.openNewAccountButton).toBeVisible();
         const savingsAccountNumber = await openNewAccountPage.createSavingsAccount();
-        console.log(`5. New Savings Account created. Account number: ${savingsAccountNumber}`);
 
         // 6. Validate Accounts overview page
         await homePage.goToAccountsOverview();
@@ -66,23 +60,31 @@ test.describe('Parabank end-to-end flow with Page Objects', () => {
         // const last_row = page.locator("table#myTable tr").last;
         // console.log(`first_cell_in_last_row_value: ${last_row}`);
         // await accountsOverviewPage.validateAccountBalance(savingsAccountNumber, '$100.00');
-        console.log('6. Accounts overview page validated for account balance');
 
         // 7. Transfer funds
         await homePage.goToTransferFunds();
         const transferFundsPage = new TransferFundsPage(page);
         await transferFundsPage.transferFunds(savingsAccountNumber, '10');
-        // Assertion: Verify transfer success message
         await expect(page.getByText('Transfer Complete!')).toBeVisible();
-        console.log('7. Funds transferred successfully');
 
         // 8. Pay the bill
         await homePage.goToBillPay();
         const billPayPage = new BillPayPage(page);
-        await billPayPage.payBillWithAccount(savingsAccountNumber, '5');
-        // Assertion: Verify bill payment success message
+        const billAmount = '5';
+        await billPayPage.payBillWithAccount(savingsAccountNumber, billAmount);
         await expect(page.getByText('Bill Payment Complete')).toBeVisible();
-        console.log('8. Bill payment successful');
+
+        // const path = require('path');
+        // const sharedData = {
+        //     accountId: savingsAccountNumber,
+        //     paymentAmount: billAmount
+        // };
+        // const dataFilePath = path.join(__dirname, '../data/sharedData.json');
+        // fs.writeFileSync(dataFilePath, JSON.stringify(sharedData, null, 2));
+
+        // logout user
+        await expect(homePage.logoutLink).toBeVisible();
+        await homePage.logoutUser();
     });
 
 });
