@@ -51,4 +51,4 @@ You need to have the following installed in your machine:
 &nbsp;&nbsp; `npx playwright install`
 4. to run the test, run the command: `npm test`
 5. To open last HTML report run:  <br />
-&nbsp;&nbsp; `npx playwright show-report playwright-test-report`
+&nbsp;&nbsp; `npx playwright show-report playwright-report`
