@@ -36,6 +36,7 @@ scenarios mentioned below.<br />
 &nbsp;&nbsp;&nbsp;&nbsp; /playwright.config.ts: Playwright config file <br />
 &nbsp;&nbsp;&nbsp;&nbsp; /tsconfig.json: TyprScript config file <br />
 &nbsp;&nbsp;&nbsp;&nbsp; /package.json: dependencies <br />
+&nbsp;&nbsp;&nbsp;&nbsp; /JenkinsFile : Groovy script that defines the CI/CD pipeline in Jenkins <br />
 
 ## Getting Started:
 

@@ -9,9 +9,9 @@ export class AccountsOverviewPage {
 
     async validateAccountBalance(accountNumber: string, expectedBalance: string): Promise<void> {
         await this.page.waitForSelector(`text=${accountNumber}`);
-        const accountRow = this.page.getByRole('row').filter({ has: this.page.getByText(accountNumber) });
+        const allRows = this.page.locator('tr');
+        const accountRow = allRows.filter({ has: this.page.getByText(accountNumber) });
         await expect(accountRow).toBeVisible();
-        await expect(accountRow.getByText(expectedBalance)).toBeVisible();
-        console.log(`Account ${accountNumber} balance validated successfully.`);
+        await expect(accountRow.getByText(expectedBalance)).toHaveCount(2);
     }
 }

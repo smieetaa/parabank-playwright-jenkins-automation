@@ -8,5 +8,5 @@ export const userDetails = {
     phoneNumber: '9876540321',
     ssn: '123-456-789',
     username: Date.now().toString(),
-    password: 'testPass',
+    password: 'testPass@123',
 };

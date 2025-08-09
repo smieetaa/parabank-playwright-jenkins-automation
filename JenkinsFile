@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs 'node18'
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/smieetaa/parabank-playwright-jenkins-automation.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+                sh 'npx playwright install'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'npx playwright test --grep @smoke --reporter=html'
+            }
+        }
+
+        stage('Publish Report') {
+            // This stage runs even if the tests fail, ensuring a report is always generated
+            when {
+                always()
+            }
+            steps {
+                // Publish the Playwright HTML report so it's viewable in Jenkins
+                publishHTML (target: [
+                    allowEmpty: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'playwright-report',
+                    reportFiles: 'index.html',
+                    reportName: 'Playwright Report'
+                ])
+            }
+        }
+    }
+}

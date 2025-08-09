@@ -4,9 +4,10 @@ import { readSharedData } from '../utils/dataUtils';
 import { apiTestData } from '../data/apiTestData'; 
 
 test.describe('API Tests', () => {
-    test('Search transaction by amount for bill payment (XML response)', async ({ request }) => {
+    test('Search transaction by amount for bill payment (XML response)', { tag: ['@smoke']}, async ({ request }) => {
         // Retrieve shared test data for the bill payment scenario
         const billPaymentDetails = readSharedData();
+        console.log('Read shared data for get transactions API call');
         
         // read the expectd data file
         const billPayment = apiTestData.billPayment;
@@ -17,6 +18,7 @@ test.describe('API Tests', () => {
         // 2. Call the service method to find the transaction.
         // This makes the test intent clear and readable.
         const responseData = await parabankApi.findTransactionByAmount(billPaymentDetails.accountId, billPaymentDetails.billAmount);
+        console.log('get transactions API called');
 
         // 3. Validate the details from the parsed XML response.
         const transaction = responseData.transactions.transaction;
@@ -32,5 +34,6 @@ test.describe('API Tests', () => {
 
         // values from static data
         expect(transaction.type).toBe(billPayment.expectedTransaction.type);
+        console.log('API response validated');
     });
 });
